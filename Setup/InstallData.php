@@ -77,7 +77,13 @@ class InstallData implements InstallDataInterface
                     'default' => true,
                     'global' => ScopedAttributeInterface::SCOPE_STORE,
                     'user_defined' => true,
-                    'system' => 0
+                    'system' => 0,
+                    'searchable' => true,
+                    'filterable' => true,
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => true,
                 ]
         ];
 

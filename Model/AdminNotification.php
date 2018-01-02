@@ -11,9 +11,22 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Request\Http as Request;
 
 class AdminNotification
 {
+    private $attributes = [
+        "customer_id",
+        "company",
+        "prefix",
+        "firstname",
+        "lastname",
+        "telephone",
+        "email",
+        "terms_of_service",
+        "image_rights"
+    ];
+
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
@@ -38,11 +51,13 @@ class AdminNotification
     public function __construct(
         TransportBuilder $transportBuilder,
         StoreManagerInterface $storeManagerInterface,
-        ScopeConfigInterface $scopeConfigInterface
+        ScopeConfigInterface $scopeConfigInterface,
+        Request $request
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->storeManagerInterface = $storeManagerInterface;
         $this->scopeConfigInterface = $scopeConfigInterface;
+        $this->request = $request;
     }
 
     /**
@@ -60,6 +75,20 @@ class AdminNotification
             $customer->getStoreId()
         );
 
+        $values = [];
+        foreach($this->attributes as $attributeCode) {
+            $values[$attributeCode] = $this->request->getParam($attributeCode);
+        }
+
+        $domains = array_filter($this->request->getParams(), function($key) {
+            return substr($key, 0, 6) == 'domain';
+        }, ARRAY_FILTER_USE_KEY);
+
+        $values['domains'] = $domains;
+
+        $data = new \Magento\Framework\DataObject();
+        $data->setData($values);
+
         $this->transportBuilder->setTemplateIdentifier('enrico69_activation_email_notification')
             ->setTemplateOptions(
                 [
@@ -67,7 +96,10 @@ class AdminNotification
                     'store' => $customer->getStoreId(),
                 ]
             )
-            ->setTemplateVars(['email' => $customer->getEmail()]);
+            ->setTemplateVars([
+                'email' => $customer->getEmail(),
+                'data' => $data
+            ]);
 
         $this->transportBuilder->addTo($siteOwnerEmail);
         $this->transportBuilder->setFrom(

@@ -1,2 +1,8 @@
 <!--@subject A new customer registered  @-->
 A new customer registered : {{var email|raw}} ! The account is waiting for approval.
+
+<p>Telefonnummer: {{var data.telephone|raw}}</p>
+<p>Online-Auftritt: {{var data.image_rights|raw}}</p>
+<p>Nutzungsbestimmungen: {{var data.terms_of_service|raw}}</p>
+
+{{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Holzweg_Customer::email/domains.phtml' domains=$data.domains}}
