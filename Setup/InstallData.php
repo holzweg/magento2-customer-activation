@@ -84,6 +84,7 @@ class InstallData implements InstallDataInterface
                     'is_visible_in_grid' => true,
                     'is_filterable_in_grid' => true,
                     'is_searchable_in_grid' => true,
+                    'source_model' => Magento\Eav\Model\Entity\Attribute\Source\Boolean
                 ]
         ];
 
