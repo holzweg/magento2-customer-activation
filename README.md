@@ -5,6 +5,8 @@
 
 ![Unstable version](http://www.dynamic-mess.com/Media/Images/unstable.jpg)
 
+?
+
 ## Description
 This module is designed to add the possibility for the site owner to manually validate customer accounts at registration.
 
